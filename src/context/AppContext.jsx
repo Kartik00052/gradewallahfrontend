@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -44,20 +44,20 @@ export function AppProvider({ children }) {
     setSidebarOpen(false);
   }, []);
 
+  const value = useMemo(() => ({
+    activeTab,
+    setActiveTab,
+    openTab,
+    sidebarOpen,
+    toggleSidebar,
+    closeSidebar,
+    theme,
+    toggleTheme,
+    tabs,
+  }), [activeTab, openTab, sidebarOpen, theme, toggleSidebar, closeSidebar, toggleTheme]);
+
   return (
-    <AppContext.Provider
-      value={{
-        activeTab,
-        setActiveTab,
-        openTab,
-        sidebarOpen,
-        toggleSidebar,
-        closeSidebar,
-        theme,
-        toggleTheme,
-        tabs,
-      }}
-    >
+    <AppContext.Provider value={value}>
       {children}
     </AppContext.Provider>
   );

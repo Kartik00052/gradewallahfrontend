@@ -78,6 +78,7 @@ export default function LoginForm({ onSwitch }) {
           disabled={loading}
           whileTap={{ scale: 0.97 }}
           whileHover={{ scale: 1.01 }}
+          aria-label="Sign in to your account"
         >
           {loading ? <span className="auth-submit-spinner" /> : 'Sign In'}
         </motion.button>
@@ -87,7 +88,7 @@ export default function LoginForm({ onSwitch }) {
 
       <p className="auth-switch">
         Don't have an account?{' '}
-        <button className="auth-link" onClick={() => onSwitch('signup')}>Sign up</button>
+        <button type="button" className="auth-link" onClick={() => onSwitch('signup')} aria-label="Switch to sign up form">Sign up</button>
       </p>
     </motion.div>
   );

@@ -9,8 +9,9 @@ export default function AppShell() {
 
   if (loading) {
     return (
-      <div className="app-loading">
+      <div className="app-loading" role="status" aria-label="Loading application">
         <div className="app-loading-spinner" />
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
@@ -21,6 +22,9 @@ export default function AppShell() {
 
   return (
     <div className="app-shell">
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <Navbar />
       <Sidebar />
       <MainContent />

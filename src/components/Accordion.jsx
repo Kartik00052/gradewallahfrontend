@@ -1,17 +1,49 @@
+import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export function AccordionItem({ id, isOpen, onToggle, title, subtitle, badge, children, depth = 0 }) {
+const arrowTransition = { type: 'spring', stiffness: 300, damping: 22 };
+const panelTransition = { type: 'spring', stiffness: 260, damping: 26, mass: 0.8 };
+const tapScale = { scale: 0.99 };
+
+const childVariants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 24 } },
+};
+
+const panelInitial = { height: 0, opacity: 0 };
+const panelAnimate = { height: 'auto', opacity: 1 };
+const panelExit = { height: 0, opacity: 0 };
+
+function makeGroupVariants(stagger) {
+  return {
+    hidden: {},
+    visible: { transition: { staggerChildren: stagger } },
+  };
+}
+
+const AccordionItem = memo(function AccordionItem({
+  id,
+  isOpen,
+  onToggle,
+  title,
+  subtitle,
+  badge,
+  children,
+  depth = 0,
+}) {
+  const handleToggle = () => onToggle(id);
+
   return (
     <div className={`accordion-item depth-${depth}`}>
       <motion.button
         className={`accordion-trigger ${isOpen ? 'open' : ''}`}
-        onClick={() => onToggle(id)}
-        whileTap={{ scale: 0.99 }}
+        onClick={handleToggle}
+        whileTap={tapScale}
       >
         <motion.span
           className="accordion-arrow"
           animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+          transition={arrowTransition}
         >
           ▸
         </motion.span>
@@ -29,44 +61,42 @@ export function AccordionItem({ id, isOpen, onToggle, title, subtitle, badge, ch
           <motion.div
             className="accordion-panel"
             key={`panel-${id}`}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 26, mass: 0.8 }}
+            initial={panelInitial}
+            animate={panelAnimate}
+            exit={panelExit}
+            transition={panelTransition}
           >
-            <div className="accordion-panel-inner">{children}</div>
+            <div className="accordion-panel-inner">
+              {isOpen ? children : null}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
-}
+});
 
-export function AccordionGroup({ children, stagger = 0.04 }) {
+const AccordionGroup = memo(function AccordionGroup({ children, stagger = 0.04 }) {
+  const variants = makeGroupVariants(stagger);
+
   return (
     <motion.div
       className="accordion-group"
       initial="hidden"
       animate="visible"
-      variants={{
-        hidden: {},
-        visible: { transition: { staggerChildren: stagger } },
-      }}
+      variants={variants}
     >
       {children}
     </motion.div>
   );
-}
+});
 
-export function AccordionChild({ children }) {
+const AccordionChild = memo(function AccordionChild({ children }) {
   return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 8 },
-        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 24 } },
-      }}
-    >
+    <motion.div variants={childVariants}>
       {children}
     </motion.div>
   );
-}
+});
+
+export { AccordionItem, AccordionGroup, AccordionChild };

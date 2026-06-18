@@ -1,13 +1,15 @@
+import { lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
-import Dashboard from '../pages/Dashboard';
-import Grades from '../pages/Grades';
-import Resources from '../pages/Resources';
-import Analyser from '../pages/Analyser';
-import Internships from '../pages/Internships';
-import Placements from '../pages/Placements';
-import DsaTracker from '../pages/DsaTracker';
-import ScanResult from '../pages/ScanResult';
+
+const Dashboard = lazy(() => import('../pages/Dashboard'));
+const Grades = lazy(() => import('../pages/Grades'));
+const Resources = lazy(() => import('../pages/Resources'));
+const Analyser = lazy(() => import('../pages/Analyser'));
+const Internships = lazy(() => import('../pages/Internships'));
+const Placements = lazy(() => import('../pages/Placements'));
+const DsaTracker = lazy(() => import('../pages/DsaTracker'));
+const ScanResult = lazy(() => import('../pages/ScanResult'));
 
 const pages = {
   dashboard: Dashboard,
@@ -36,12 +38,21 @@ const pageVariants = {
   },
 };
 
+function PageFallback() {
+  return (
+    <div className="page-suspense-fallback" role="status" aria-label="Loading page">
+      <div className="page-suspense-spinner" />
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
+}
+
 export default function MainContent() {
   const { activeTab } = useApp();
   const Page = pages[activeTab];
 
   return (
-    <main className="main-content">
+    <main className="main-content" id="main-content" aria-label="Page content">
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
@@ -51,7 +62,9 @@ export default function MainContent() {
           animate="animate"
           exit="exit"
         >
-          <Page />
+          <Suspense fallback={<PageFallback />}>
+            <Page />
+          </Suspense>
         </motion.div>
       </AnimatePresence>
     </main>

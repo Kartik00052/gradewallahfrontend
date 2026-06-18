@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext(null);
@@ -69,21 +69,21 @@ export function AuthProvider({ children }) {
     setOnboardingComplete(true);
   }, []);
 
+  const value = useMemo(() => ({
+    user,
+    session,
+    loading,
+    onboardingComplete,
+    signUp,
+    signIn,
+    signInWithGoogle,
+    signInWithGithub,
+    signOut,
+    completeOnboarding,
+  }), [user, session, loading, onboardingComplete, signUp, signIn, signInWithGoogle, signInWithGithub, signOut, completeOnboarding]);
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        session,
-        loading,
-        onboardingComplete,
-        signUp,
-        signIn,
-        signInWithGoogle,
-        signInWithGithub,
-        signOut,
-        completeOnboarding,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

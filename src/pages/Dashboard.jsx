@@ -113,7 +113,7 @@ export default function Dashboard() {
         >
           <div className="section-header">
             <h2 className="section-title">Latest Placements</h2>
-            <button className="section-link">View all →</button>
+            <button type="button" className="section-link">View all →</button>
           </div>
           <div className="placement-list">
             {placements.map((p, i) => (
@@ -138,7 +138,7 @@ export default function Dashboard() {
         >
           <div className="section-header">
             <h2 className="section-title">Top Internships</h2>
-            <button className="section-link">View all →</button>
+            <button type="button" className="section-link">View all →</button>
           </div>
           <div className="internship-list">
             {internships.map((i, idx) => (

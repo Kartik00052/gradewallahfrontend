@@ -7,3 +7,6 @@ export { default as GradeCard } from './GradeCard';
 export { default as GradeChart } from './GradeChart';
 export { AccordionItem, AccordionGroup, AccordionChild } from './Accordion';
 export { default as ResourceCard } from './ResourceCard';
+export { default as ProgressRing } from './ProgressRing';
+export { default as Heatmap } from './Heatmap';
+export { default as SkillGraph } from './SkillGraph';
