@@ -13,7 +13,7 @@ if (missingEnv) {
 }
 
 const createDemoClient = () => {
-  const noop = () => Promise.resolve({ data: null, error: null });
+  const noop = () => Promise.resolve({ data: { session: null }, error: null });
   return {
     auth: {
       getSession: noop,
